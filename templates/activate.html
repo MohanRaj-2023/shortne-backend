@@ -1,0 +1,9 @@
+{% autoescape off %}
+
+Hi {{user.username}}! 
+
+please click the below link to activate your Shortne account.
+
+{{domain}}{% url 'activate' uidb64=user_id token=token %}
+  
+{% endautoescape %} 
