@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: shortne-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: daphne -b 0.0.0.0 -p 10000 project.asgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: project.settings
+      - key: REDIS_URL
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
