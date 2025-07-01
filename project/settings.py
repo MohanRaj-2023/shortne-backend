@@ -29,7 +29,12 @@ SECRET_KEY = 'django-insecure-%rtm!zp(e)beea=(-yw2y!vb0ik$_7gdrk-qi21$7e#7rdv--t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 
+                 '127.0.0.1',
+                 'shortne-backend-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
+                        'https://shortne-backend-production.up.railway.app/']
 
 
 # Application definition
