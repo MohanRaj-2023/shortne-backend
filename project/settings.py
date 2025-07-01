@@ -45,7 +45,7 @@ DEBUG = True
 #ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['localhost', 
                  '127.0.0.1',
-                 'shortne-backend-production.up.railway.app']
+                 'shortne-backend.onrender.com']
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
                         'https://shortne-backend-production.up.railway.app/']
 
