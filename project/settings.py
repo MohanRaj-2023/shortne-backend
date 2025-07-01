@@ -14,17 +14,19 @@ from pathlib import Path
 import os
 import sys
 from datetime import timedelta
-from dotenv import load_dotenv
+import dj_database_url
 
-load_dotenv()
+# from dotenv import load_dotenv
 
-print("🚨 All ENV keys:", list(os.environ.keys()))
+# load_dotenv()
 
-print("DB_NAME:", os.environ.get('DB_NAME'))
-print("DB_USER:", os.environ.get('DB_USER'))
-print("DB_PASSWORD:", os.environ.get('DB_PASSWORD'))
-print("DB_HOST:", os.environ.get('DB_HOST'))
-print("DB_PORT:", os.environ.get('DB_PORT'))
+# print("🚨 All ENV keys:", list(os.environ.keys()))
+
+# print("DB_NAME:", os.environ.get('DB_NAME'))
+# print("DB_USER:", os.environ.get('DB_USER'))
+# print("DB_PASSWORD:", os.environ.get('DB_PASSWORD'))
+# print("DB_HOST:", os.environ.get('DB_HOST'))
+# print("DB_PORT:", os.environ.get('DB_PORT'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -121,24 +123,22 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'zone_db',
-        # 'USER':'root',
-        # 'PASSWORD':'',
-        # 'OPTIONS': {
-        #             'charset': 'utf8mb4',
-        #             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        #             }
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    },
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'zone_db',
+#         'USER':'root',
+#         'PASSWORD':'',
+#         'OPTIONS': {
+#                     'charset': 'utf8mb4',
+#                     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#                     }
+#     },
     
+# }
+
+DATABASES = {
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
 
