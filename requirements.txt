@@ -24,6 +24,7 @@ pycparser==2.22
 PyJWT==2.9.0
 PyMySQL==1.1.1
 pyOpenSSL==25.1.0
+python-dotenv==1.1.1
 redis==6.2.0
 service-identity==24.2.0
 six==1.17.0
