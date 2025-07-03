@@ -98,6 +98,7 @@ class PostCreateView(APIView):
                     media=request.FILES.get('media')
                 )
 
+                print("Media URL:",post.media.url)
                 # ✳️ Process comma-separated hashtag string
                 raw_hashtags = request.data.get('query', '')
                 tag_names = [tag.strip().lstrip('#') for tag in raw_hashtags.split(',') if tag.strip()]
