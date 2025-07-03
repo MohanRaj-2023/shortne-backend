@@ -47,7 +47,7 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     caption = models.TextField(blank=True)
     hashtags=models.ManyToManyField(Hashtags,blank=True)
-    media = models.FileField(upload_to='posts/media/',validators=[file_size_type_validator])
+    media =  models.URLField()
     media_type=models.CharField(max_length=100,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
