@@ -2,13 +2,19 @@ asgiref==3.8.1
 attrs==25.3.0
 autobahn==24.4.2
 Automat==25.4.16
+certifi==2025.6.15
 cffi==1.17.1
 channels==4.2.2
 channels_redis==4.2.1
+chardet==5.2.0
+charset-normalizer==3.4.2
+cloudinary==1.44.1
 constantly==23.10.4
 cryptography==45.0.3
 daphne==4.2.0
+dj-database-url==3.0.0
 Django==5.2
+django-cloudinary-storage==0.3.0
 django-cors-headers==4.7.0
 django-redis==5.4.0
 djangorestframework==3.16.0
@@ -18,6 +24,7 @@ idna==3.10
 incremental==24.7.2
 msgpack==1.1.0
 pillow==11.2.1
+psycopg2-binary==2.9.10
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.22
@@ -26,6 +33,7 @@ PyMySQL==1.1.1
 pyOpenSSL==25.1.0
 python-dotenv==1.1.1
 redis==6.2.0
+requests==2.32.4
 service-identity==24.2.0
 six==1.17.0
 sqlparse==0.5.3
@@ -33,6 +41,5 @@ Twisted==24.11.0
 txaio==23.1.1
 typing_extensions==4.14.0
 tzdata==2025.2
+urllib3==2.5.0
 zope.interface==7.2
-dj-database-url==3.0.0
-psycopg2-binary==2.9.10
