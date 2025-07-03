@@ -1,6 +1,6 @@
 # from django.contrib import admin
 from django.urls import path
-from .views import HashtagSearchView,PostCreateView,PostsView,PostView,GetPosts,VideoPostsView,CombinedSearchView,PostEditView,DeletePost
+from .views import HashtagSearchView,PostCreateView,PostsView,PostView,GetPosts,VideoPostsView,CombinedSearchView,PostEditView,DeletePost,CloudinaryTestUpload
 # PostCreateView
 
 urlpatterns=[
@@ -13,4 +13,5 @@ urlpatterns=[
     path('search/',CombinedSearchView.as_view(),name='search'),
     path('post-edit/',PostEditView.as_view(),name='post-edit'),
     path('post-delete/<int:post_id>/',DeletePost.as_view(),name='post-delete'),
+    path('test-cloudinary/',CloudinaryTestUpload.as_view(),name='test-cloud')
     ]

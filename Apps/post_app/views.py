@@ -25,6 +25,8 @@ from rest_framework.pagination import CursorPagination
 # search
 from django.db.models import Q
 
+import cloudinary.uploader
+
 # Create your views here.
 
 class PostPagination(CursorPagination):
@@ -288,3 +290,20 @@ class DeletePost(APIView):
             return Response({"details":"Post deleted successfully...!"})
         except Exception as e:
             return Response({"details":str(e)})
+        
+
+# test cloud
+
+
+class CloudinaryTestUpload(APIView):
+    def get(self, request):
+        try:
+            # Upload a test image from the internet
+            file_url = 'https://res.cloudinary.com/dq8biwq8q/image/upload/v1751525292/cld-sample-5.jpg'
+            result = cloudinary.uploader.upload(file_url)
+            return Response({
+                'uploaded': True,
+                'url': result.get('secure_url')
+            })
+        except Exception as e:
+            return Response({'error': str(e)})
