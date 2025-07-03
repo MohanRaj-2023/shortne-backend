@@ -141,10 +141,16 @@ DATABASES = {
 
 # Cloud storage
 
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'dq8biwq8q',
+#     'API_KEY': '332996447824889',
+#     'API_SECRET': 'g2fpCYqqRTdcf6FDnbffF3WlNa4'
+# }
+
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dq8biwq8q',
-    'API_KEY': '332996447824889',
-    'API_SECRET': 'g2fpCYqqRTdcf6FDnbffF3WlNa4'
+    'CLOUD_NAME': os.getenv('dq8biwq8q'),
+    'API_KEY': os.getenv('332996447824889'),
+    'API_SECRET': os.getenv('g2fpCYqqRTdcf6FDnbffF3WlNa4')
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
