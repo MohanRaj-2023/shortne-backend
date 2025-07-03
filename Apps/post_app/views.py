@@ -81,12 +81,19 @@ class PostCreateView(APIView):
             user = request.user
             if user is not None:
                 file = request.FILES.get('media')
+                if not file:
+                    return Response({"error": "No media file uploaded"}, status=400)
 
                 # Custom size limits
                 image_limit = 5 * 1024 * 1024  # 5 MB
                 video_limit = 20 * 1024 * 1024  # 20 MB
 
-                mime_type, _ = mimetypes.guess_type(file.name)
+                # Validate file type and size
+                try:
+                    mime_type, _ = mimetypes.guess_type(file.name)
+                except AttributeError:
+                    return Response({"error": "Invalid file upload"}, status=400)
+                
                 if mime_type:
                     if mime_type.startswith('image') and file.size > image_limit:
                         return Response({"error": "Image must be less than 5MB"}, status=status.HTTP_400_BAD_REQUEST)
@@ -105,7 +112,7 @@ class PostCreateView(APIView):
                     media=cloudinary_url
                 )
 
-                print("Media URL:",post.media.url)
+                print("Media URL:",cloudinary_url)
                 # ✳️ Process comma-separated hashtag string
                 raw_hashtags = request.data.get('query', '')
                 tag_names = [tag.strip().lstrip('#') for tag in raw_hashtags.split(',') if tag.strip()]
