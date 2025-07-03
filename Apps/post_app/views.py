@@ -26,7 +26,6 @@ from rest_framework.pagination import CursorPagination
 from django.db.models import Q
 
 import cloudinary.uploader
-from cloudinary.uploader import upload as cloudinary_upload
 
 # Create your views here.
 
@@ -103,7 +102,7 @@ class PostCreateView(APIView):
                     return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
 
                 # ✅ Upload to Cloudinary manually
-                upload_result = cloudinary_upload(file)
+                upload_result = cloudinary.uploader.upload(file)
                 cloudinary_url = upload_result.get('secure_url')
 
                 post = Post.objects.create(
