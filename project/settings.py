@@ -16,6 +16,11 @@ import sys
 from datetime import timedelta
 import dj_database_url
 from dotenv import load_dotenv
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -59,6 +64,8 @@ INSTALLED_APPS = [
     'message_app',
     'channels',
     "corsheaders",
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 ASGI_APPLICATION = 'project.asgi.application'
@@ -126,12 +133,21 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #     },
     
 # }
-print("🚨 DATABASE_URL:", os.environ.get("DATABASE_URL"))
+# print("🚨 DATABASE_URL:", os.environ.get("DATABASE_URL"))
 
 DATABASES = {
     'default': dj_database_url.config(conn_max_age=600)
 }
 
+# Cloud storage
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dq8biwq8q',
+    'API_KEY': '332996447824889',
+    'API_SECRET': 'g2fpCYqqRTdcf6FDnbffF3WlNa4'
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -171,7 +187,7 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

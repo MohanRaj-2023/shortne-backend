@@ -17,7 +17,7 @@ media/
 staticfiles/
 db.sqlite3
 
-# OS files
+# OS files 
 .DS_Store
 Thumbs.db
 
