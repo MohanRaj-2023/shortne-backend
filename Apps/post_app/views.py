@@ -267,14 +267,14 @@ def extract_cloudinary_public_id(url):
             raise ValueError("Invalid Cloudinary URL: missing 'upload'")
 
         upload_index = parts.index('upload')
-        resource_type = parts[1]  # 'image' or 'video'
+        # resource_type = parts[1]  # 'image' or 'video'
 
         public_id_parts = parts[upload_index + 1:]
         public_id_with_ext = '/'.join(public_id_parts)
 
         public_id, _ = os.path.splitext(public_id_with_ext)
 
-        return public_id, resource_type
+        return public_id
     except Exception as e:
         print("Error extracting public ID:", e)
         return None, None
@@ -302,10 +302,10 @@ class PostEditView(APIView):
                 media=request.FILES.get('media')
 
                 old_url = post.media
-                public_id,resource_type =extract_cloudinary_public_id(old_url)
+                public_id =extract_cloudinary_public_id(old_url)
                 
-                if public_id and resource_type in ['image', 'video', 'raw']:
-                    destroy(public_id, resource_type=resource_type)
+                if public_id:
+                    destroy(public_id, resource_type=post.media_type)
                 
                 if media is not None:
                     upload_result = cloudinary.uploader.upload(media,resource_type='auto')
@@ -346,16 +346,16 @@ class DeletePost(APIView):
             
             # Step 1: Extract public ID from the Cloudinary URL
             media_url = post.media
-            public_id,resource_type = extract_cloudinary_public_id(media_url)
+            public_id = extract_cloudinary_public_id(media_url)
 
             print("URL:", media_url)
             print("Extracted public ID:", public_id)
-            print("Resource type:", resource_type)
+            print("Resource type:", post.media_type)
 
 
             # Step 2: Delete media from Cloudinary (if it's not the default image)
             if public_id:
-                result = destroy(public_id, resource_type='auto')
+                result = destroy(public_id, resource_type=post.media_type)
                 print("Cloudinary destroy result:", result)
             
             post.delete()
