@@ -266,11 +266,12 @@ def extract_cloudinary_public_id(url):
     try:
         path = urlparse(url).path  # e.g., /demo/image/upload/v123456/myfolder/file.jpg
         parts = path.split('/')
+        resource_type = parts[2]
         upload_index = parts.index('upload')  # Find where 'upload' starts
         public_id_parts = parts[upload_index + 1:]  # Everything after 'upload'
         public_id_with_ext = '/'.join(public_id_parts)
         public_id = '.'.join(public_id_with_ext.split('.')[:-1])  # Remove file extension
-        return public_id
+        return public_id,resource_type
     except Exception as e:
         print("Cloudinary public ID extraction failed:", e)
         return None
@@ -297,9 +298,10 @@ class PostEditView(APIView):
                 media=request.FILES.get('media')
 
                 old_url = post.media
-                public_id =extract_cloudinary_public_id(old_url)
-                if public_id:
-                    destroy(public_id, resource_type='auto')
+                public_id,resource_type =extract_cloudinary_public_id(old_url)
+                
+                if public_id and resource_type in ['image', 'video', 'raw']:
+                    destroy(public_id, resource_type=resource_type)
                 
                 if media is not None:
                     upload_result = cloudinary.uploader.upload(media,resource_type='auto')
@@ -340,10 +342,10 @@ class DeletePost(APIView):
             
             # Step 1: Extract public ID from the Cloudinary URL
             media_url = post.media
-            public_id = extract_cloudinary_public_id(media_url)
+            public_id,resource_type = extract_cloudinary_public_id(media_url)
 
             # Step 2: Delete media from Cloudinary (if it's not the default image)
-            if public_id:
+            if public_id and resource_type in ['image', 'video', 'raw']:
                 destroy(public_id, resource_type='auto')
 
             post.delete()
