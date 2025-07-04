@@ -27,6 +27,8 @@ from django.db.models import Q
 
 # cloudinary
 import cloudinary.uploader
+from cloudinary.uploader import destroy
+from urllib.parse import urlparse
 
 import traceback
 # Create your views here.
@@ -253,6 +255,27 @@ class CombinedSearchView(APIView):
             'posts': post_data
         })
     
+def extract_cloudinary_public_id(url):
+    """
+    Extracts the public ID from a Cloudinary URL.
+    
+    Example:
+    https://res.cloudinary.com/demo/image/upload/v1628271721/myfolder/myfile.jpg
+    → returns: myfolder/myfile
+    """
+    try:
+        path = urlparse(url).path  # e.g., /demo/image/upload/v123456/myfolder/file.jpg
+        parts = path.split('/')
+        upload_index = parts.index('upload')  # Find where 'upload' starts
+        public_id_parts = parts[upload_index + 1:]  # Everything after 'upload'
+        public_id_with_ext = '/'.join(public_id_parts)
+        public_id = '.'.join(public_id_with_ext.split('.')[:-1])  # Remove file extension
+        return public_id
+    except Exception as e:
+        print("Cloudinary public ID extraction failed:", e)
+        return None
+
+
 # edit post
 class PostEditView(APIView):
     permission_classes=[IsAuthenticated]
@@ -273,10 +296,18 @@ class PostEditView(APIView):
                 caption=request.data.get('description')
                 media=request.FILES.get('media')
 
+                old_url = post.media
+                public_id =extract_cloudinary_public_id(old_url)
+                if public_id:
+                    destroy(public_id, resource_type='auto')
+                
+                if media is not None:
+                    upload_result = cloudinary.uploader.upload(media,resource_type='auto')
+                    cloudinary_url = upload_result.get('secure_url')
+                    post.media=cloudinary_url
+                
                 if caption is not None:
                     post.caption=caption
-                if media is not None:
-                    post.media=media
                     # print("Media:",media)
 
                 # ✳️ Process comma-separated hashtag string
@@ -306,6 +337,15 @@ class DeletePost(APIView):
         try:
             user = request.user
             post=Post.objects.get(id=post_id)
+            
+            # Step 1: Extract public ID from the Cloudinary URL
+            media_url = post.media
+            public_id = extract_cloudinary_public_id(media_url)
+
+            # Step 2: Delete media from Cloudinary (if it's not the default image)
+            if public_id:
+                destroy(public_id, resource_type='auto')
+
             post.delete()
             return Response({"details":"Post deleted successfully...!"})
         except Exception as e:
