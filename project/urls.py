@@ -2,8 +2,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
+from django.http import JsonResponse
+
+def health_check(request):
+    print("API Running...")
+    return JsonResponse({"status": "API running..."})
 
 urlpatterns = [
+    path('', health_check),
+
     path('admin/', admin.site.urls),
 
     # user_app
