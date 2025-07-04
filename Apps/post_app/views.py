@@ -85,13 +85,19 @@ class PostCreateView(APIView):
 
                 # Custom size limits
                 image_limit = 5 * 1024 * 1024  # 5 MB
-                video_limit = 20 * 1024 * 1024  # 20 MB
+                video_limit = 10 * 1024 * 1024  # 10 MB
 
-                # Validate file type and size
-                try:
-                    mime_type, _ = mimetypes.guess_type(file.name)
-                except AttributeError:
-                    return Response({"error": "Invalid file upload"}, status=400)
+                file_name = getattr(file, 'name', None)
+                if not file_name:
+                    return Response({"error": "Invalid file upload. No filename found."}, status=400)
+
+                mime_type, _ = mimetypes.guess_type(file_name)
+
+                print("DEBUG: file type:", type(file))
+                print("DEBUG: file name:", getattr(file, 'name', 'No name'))
+                print("DEBUG: file size:", getattr(file, 'size', 'No size'))
+
+
                 
                 if mime_type:
                     if mime_type.startswith('image') and file.size > image_limit:
