@@ -109,7 +109,7 @@ class PostCreateView(APIView):
                     return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
 
                 # ✅ Upload to Cloudinary manually
-                upload_result = cloudinary.uploader.upload(file)
+                upload_result = cloudinary.uploader.upload(file,resource_type='auto')
                 cloudinary_url = upload_result.get('secure_url')
 
                 post = Post.objects.create(

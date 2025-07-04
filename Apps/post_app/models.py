@@ -11,22 +11,6 @@ class Hashtags(models.Model):
     def __str__(self):
         return self.name
     
-def file_size_type_validator(file):
-    image_limit = 5 * 1024 * 1024  # 5 MB
-    video_limit = 20 * 1024 * 1024  # 20 MB
-
-    mime_type, _ = mimetypes.guess_type(file.name)
-
-    if mime_type:
-        if mime_type.startswith('image'):
-            if file.size > image_limit:
-                raise ValidationError("Image file size must be less than 5 MB.")
-            return  # ✅ valid image
-        elif mime_type.startswith('video'):
-            if file.size > video_limit:
-                raise ValidationError("Video file size must be less than 20 MB.")
-            return  # ✅ valid video
-    raise ValidationError("Unsupported media type. Only images and videos are allowed.")
 
 
 class Post(models.Model):
