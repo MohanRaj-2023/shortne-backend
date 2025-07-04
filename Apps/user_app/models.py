@@ -17,7 +17,7 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user  = models.OneToOneField(User,on_delete=models.CASCADE,related_name='profile')
     bio   = models.TextField(blank=True, default="This user hasn't added a bio yet.")
-    image = models.ImageField(blank=True, upload_to='profile_images/',default='profile_images/defaultimg.jpg')
+    image = models.URLField(default='https://res.cloudinary.com/dq8biwq8q/image/upload/v1751619038/defaultimg_nfiht1.jpg')
     link  = models.URLField(max_length=200,blank=True)
 
     def __str__(self):

@@ -27,6 +27,10 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 # pagination
 from rest_framework.pagination import PageNumberPagination
 
+# cloudinary
+import cloudinary.uploader
+import mimetypes
+
 # Create your views here.
 
 class PostPagination(PageNumberPagination):
@@ -260,11 +264,18 @@ class EditUserinfoView(APIView):
             image = request.FILES.get('image') or request.data.get('image')
             bio=request.data.get('bio')
             link=request.data.get('link')
-            
+
             userprofile=UserProfile.objects.get(user=user)
 
-            if image is not None:
-                userprofile.image=image
+            if image:
+                mime_type, _ = mimetypes.guess_type(image.name)
+                if mime_type and mime_type.startswith("image"):
+                    upload_result = cloudinary.uploader.upload(image, resource_type='auto')
+                    cloudinary_url = upload_result.get('secure_url')
+                    userprofile.image = cloudinary_url
+                else:
+                    return Response({"details": "Invalid image file."}, status=400)
+                
             if bio is not None:
                 userprofile.bio=bio
             if link is not None:

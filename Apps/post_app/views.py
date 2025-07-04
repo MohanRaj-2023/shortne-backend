@@ -25,6 +25,7 @@ from rest_framework.pagination import CursorPagination
 # search
 from django.db.models import Q
 
+# cloudinary
 import cloudinary.uploader
 
 import traceback
@@ -108,7 +109,7 @@ class PostCreateView(APIView):
                 else:
                     return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
 
-                # ✅ Upload to Cloudinary manually
+                # Upload to Cloudinary manually
                 upload_result = cloudinary.uploader.upload(file,resource_type='auto')
                 cloudinary_url = upload_result.get('secure_url')
 
