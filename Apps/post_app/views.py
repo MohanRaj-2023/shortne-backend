@@ -113,12 +113,15 @@ class PostCreateView(APIView):
 
                 # Upload to Cloudinary manually
                 upload_result = cloudinary.uploader.upload(file,resource_type='auto')
+                resource_type = upload_result.get("resource_type") 
+
                 cloudinary_url = upload_result.get('secure_url')
 
                 post = Post.objects.create(
                     user=user,
                     caption=request.data.get('description'),
-                    media=cloudinary_url
+                    media=cloudinary_url,
+                    media_type=resource_type
                 )
 
                 print("Media URL:",cloudinary_url)

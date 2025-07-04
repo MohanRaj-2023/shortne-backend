@@ -21,15 +21,15 @@ class Post(models.Model):
     media_type=models.CharField(max_length=100,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self,*args,**kwargs):
-        if self.media:
-            mime_type, _ = mimetypes.guess_type(self.media) 
-        if mime_type:
-            if mime_type.startswith('image'):
-                self.media_type='image'
-            elif mime_type.startswith('video'):
-                self.media_type='video'
-        super().save(*args,**kwargs)
+    # def save(self,*args,**kwargs):
+    #     if self.media:
+    #         mime_type, _ = mimetypes.guess_type(self.media) 
+    #     if mime_type:
+    #         if mime_type.startswith('image'):
+    #             self.media_type='image'
+    #         elif mime_type.startswith('video'):
+    #             self.media_type='video'
+    #     super().save(*args,**kwargs)
 
     def __str__(self):
         return f"{self.user}'s post"
