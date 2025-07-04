@@ -255,19 +255,35 @@ class CombinedSearchView(APIView):
             'posts': post_data
         })
     
+from urllib.parse import urlparse
+import os
+
 def extract_cloudinary_public_id(url):
+    """
+    Given a Cloudinary URL, extract the public ID and resource type (image or video).
+    Works for URLs like:
+    https://res.cloudinary.com/your_cloud/image/upload/v1234567890/folder/filename.jpg
+    """
     try:
-        path = urlparse(url).path  # e.g., /demo/image/upload/v123456/myfolder/file.jpg
-        parts = path.split('/')
-        resource_type = parts[2]
-        upload_index = parts.index('upload')  # Find where 'upload' starts
-        public_id_parts = parts[upload_index + 1:]  # Everything after 'upload'
+        parsed = urlparse(url)
+        parts = parsed.path.strip('/').split('/')
+
+        if 'upload' not in parts:
+            raise ValueError("Invalid Cloudinary URL: missing 'upload'")
+
+        upload_index = parts.index('upload')
+        resource_type = parts[1]  # 'image' or 'video'
+
+        public_id_parts = parts[upload_index + 1:]
         public_id_with_ext = '/'.join(public_id_parts)
-        public_id = '.'.join(public_id_with_ext.split('.')[:-1])  # Remove file extension
-        return public_id,resource_type
+
+        public_id, _ = os.path.splitext(public_id_with_ext)
+
+        return public_id, resource_type
     except Exception as e:
-        print("Cloudinary public ID extraction failed:", e)
-        return None
+        print("Error extracting public ID:", e)
+        return None, None
+
 
 
 # edit post
