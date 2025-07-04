@@ -27,6 +27,7 @@ from django.db.models import Q
 
 import cloudinary.uploader
 
+import traceback
 # Create your views here.
 
 class PostPagination(CursorPagination):
@@ -138,6 +139,7 @@ class PostCreateView(APIView):
 
         except Exception as error:
             print("Error:", error)
+            traceback.print_exc()
             return Response({"error": str(error)}, status=500)
 
 
