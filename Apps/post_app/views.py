@@ -354,8 +354,8 @@ class DeletePost(APIView):
 
 
             # Step 2: Delete media from Cloudinary (if it's not the default image)
-            if public_id and resource_type in ['image', 'video', 'raw']:
-                result = destroy(public_id, resource_type=resource_type)
+            if public_id:
+                result = destroy(public_id, resource_type='auto')
                 print("Cloudinary destroy result:", result)
             
             post.delete()
