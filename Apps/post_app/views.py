@@ -254,16 +254,11 @@ class CombinedSearchView(APIView):
             'users': user_data,
             'posts': post_data
         })
-    
-from urllib.parse import urlparse
+
 import os
 
 def extract_cloudinary_public_id(url):
-    """
-    Given a Cloudinary URL, extract the public ID and resource type (image or video).
-    Works for URLs like:
-    https://res.cloudinary.com/your_cloud/image/upload/v1234567890/folder/filename.jpg
-    """
+    
     try:
         parsed = urlparse(url)
         parts = parsed.path.strip('/').split('/')
@@ -353,10 +348,16 @@ class DeletePost(APIView):
             media_url = post.media
             public_id,resource_type = extract_cloudinary_public_id(media_url)
 
+            print("URL:", media_url)
+            print("Extracted public ID:", public_id)
+            print("Resource type:", resource_type)
+
+
             # Step 2: Delete media from Cloudinary (if it's not the default image)
             if public_id and resource_type in ['image', 'video', 'raw']:
-                destroy(public_id, resource_type=resource_type)
-
+                result = destroy(public_id, resource_type=resource_type)
+                print("Cloudinary destroy result:", result)
+            
             post.delete()
             return Response({"details":"Post deleted successfully...!"})
         except Exception as e:
