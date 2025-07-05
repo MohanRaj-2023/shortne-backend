@@ -31,6 +31,9 @@ from rest_framework.pagination import PageNumberPagination
 import cloudinary.uploader
 import mimetypes
 
+from cloudinary.uploader import destroy
+from urllib.parse import urlparse
+
 # Create your views here.
 
 class PostPagination(PageNumberPagination):
@@ -256,6 +259,31 @@ class FriendslistView(APIView):
             return Response({"details":str(error)})
         
 # Edit userinfo
+
+import os
+
+def extract_cloudinary_public_id(url):
+    
+    try:
+        parsed = urlparse(url)
+        parts = parsed.path.strip('/').split('/')
+
+        if 'upload' in parts:
+            upload_index = parts.index('upload')
+            # everything after 'upload/' is version and public_id
+            public_id_with_ext = "/".join(parts[upload_index + 1:])  # v1751713680/filename.jpg
+            filename = os.path.basename(public_id_with_ext)
+            public_id = filename.rsplit('.', 1)[0]  # remove .jpg or .mp4
+            print("Actual public_id sent to Cloudinary destroy:", public_id)
+
+            return public_id
+        return None
+    except Exception as e:
+        print("Error extracting public ID:", e)
+        return None, None
+
+
+
 class EditUserinfoView(APIView):
     permission_classes=[IsAuthenticated]
     def patch(self,request):
@@ -267,12 +295,20 @@ class EditUserinfoView(APIView):
 
             userprofile=UserProfile.objects.get(user=user)
 
+
             if image:
                 mime_type, _ = mimetypes.guess_type(image.name)
+
                 if mime_type and mime_type.startswith("image"):
-                    upload_result = cloudinary.uploader.upload(image, resource_type='auto')
-                    cloudinary_url = upload_result.get('secure_url')
-                    userprofile.image = cloudinary_url
+                        old_url = userprofile.image
+                        public_id =extract_cloudinary_public_id(old_url)
+                    
+                        if public_id:
+                            destroy(public_id, resource_type="image")
+
+                        upload_result = cloudinary.uploader.upload(image, resource_type='auto')
+                        cloudinary_url = upload_result.get('secure_url')
+                        userprofile.image = cloudinary_url
                 else:
                     return Response({"details": "Invalid image file."}, status=400)
                 
@@ -282,8 +318,7 @@ class EditUserinfoView(APIView):
                 userprofile.link=link
                 
             print("Image:", image)
-            print("Bio:", bio)
-            print("Link:", link)
+
 
             userprofile.save()
             serializer=UserProfileSerializer(userprofile)
