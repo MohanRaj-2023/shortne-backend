@@ -77,17 +77,18 @@ redis_url = os.getenv("REDIS_URL")
 url = urlparse.urlparse(redis_url)
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
             "hosts": [{
                 "address": (url.hostname, url.port),
                 "password": url.password,
                 "ssl": url.scheme == "rediss"
             }]
         },
-    },
+    }
 }
+
 
 
 # CHANNEL_LAYERS = {
