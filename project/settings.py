@@ -74,21 +74,21 @@ ASGI_APPLICATION = 'project.asgi.application'
 
 #redis channel config
 redis_url = os.getenv("REDIS_URL")
-url = urlparse.urlparse(redis_url)
+parsed_url = urlparse(redis_url)
 
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [{
-                "address": (url.hostname, url.port),
-                "password": url.password,
-                "ssl": url.scheme == "rediss"
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [{
+                'host': parsed_url.hostname,
+                'port': parsed_url.port,
+                'password': parsed_url.password,
+                'ssl': parsed_url.scheme == 'rediss'
             }]
         },
-    }
+    },
 }
-
 
 
 # CHANNEL_LAYERS = {
