@@ -125,6 +125,8 @@ class PostCreateView(APIView):
                 )
 
                 print("Media URL:",cloudinary_url)
+                print("Media_type:",post.media_type)
+
                 # ✳️ Process comma-separated hashtag string
                 raw_hashtags = request.data.get('query', '')
                 tag_names = [tag.strip().lstrip('#') for tag in raw_hashtags.split(',') if tag.strip()]
@@ -266,18 +268,16 @@ def extract_cloudinary_public_id(url):
         parsed = urlparse(url)
         parts = parsed.path.strip('/').split('/')
 
-        if 'upload' not in parts:
-            raise ValueError("Invalid Cloudinary URL: missing 'upload'")
+        if 'upload' in parts:
+            upload_index = parts.index('upload')
+            # everything after 'upload/' is version and public_id
+            public_id_with_ext = "/".join(parts[upload_index + 1:])  # v1751713680/filename.jpg
+            filename = os.path.basename(public_id_with_ext)
+            public_id = filename.rsplit('.', 1)[0]  # remove .jpg or .mp4
+            print("Actual public_id sent to Cloudinary destroy:", public_id)
 
-        upload_index = parts.index('upload')
-        # resource_type = parts[1]  # 'image' or 'video'
-
-        public_id_parts = parts[upload_index + 1:]
-        public_id_with_ext = '/'.join(public_id_parts)
-
-        public_id, _ = os.path.splitext(public_id_with_ext)
-
-        return public_id
+            return public_id
+        return None
     except Exception as e:
         print("Error extracting public ID:", e)
         return None, None
@@ -351,7 +351,7 @@ class DeletePost(APIView):
             media_url = post.media
             public_id = extract_cloudinary_public_id(media_url)
 
-            print("URL:", media_url)
+            print("URL:", media_url) # https://res.cloudinary.com/dq8biwq8q/image/upload/v1751713680/ib5lalz7td6pexlzjnkd.jpg
             print("Extracted public ID:", public_id)
             print("Resource type:", post.media_type)
 
