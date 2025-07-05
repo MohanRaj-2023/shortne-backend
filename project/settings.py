@@ -15,7 +15,7 @@ import os
 import sys
 from datetime import timedelta
 import dj_database_url
-import urllib.parse as urlparse
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 load_dotenv()
 
