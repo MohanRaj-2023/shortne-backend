@@ -15,6 +15,7 @@ import os
 import sys
 from datetime import timedelta
 import dj_database_url
+import urllib.parse as urlparse
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -71,14 +72,32 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = 'project.asgi.application'
 
+#redis channel config
+redis_url = os.getenv("REDIS_URL")
+url = urlparse.urlparse(redis_url)
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [os.environ.get("REDIS_URL")],
+            "hosts": [{
+                "address": (url.hostname, url.port),
+                "password": url.password,
+                "ssl": url.scheme == "rediss"
+            }]
         },
     },
 }
+
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [os.environ.get("REDIS_URL")],
+#         },
+#     },
+# }
 
 AUTH_USER_MODEL = 'user_app.User'
 
