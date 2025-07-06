@@ -271,7 +271,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION":  f"rediss://:{parsed.password}@{parsed.hostname}:{parsed.port}/1",
+        "LOCATION":  os.getenv("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "SSL": True,
