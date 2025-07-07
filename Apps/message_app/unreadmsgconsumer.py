@@ -37,6 +37,7 @@ class UnreadMessageConsumer(AsyncWebsocketConsumer):
     #     #     }))
 
     async def unread_message_count(self, event):
+        print("📨 unread_message_count RECEIVED in consumer with count:", event['unread_messages'])  # ✅ Debug here
         await self.send(text_data=json.dumps({
             'type': 'UNREAD_MESSAGE_COUNT_UPDATE',
             'unread_messages': event['unread_messages']
