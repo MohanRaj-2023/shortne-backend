@@ -141,23 +141,3 @@ class ChatListView(APIView):
         return Response(serializer.data)
     
 
-# class SharePostView(APIView):
-#      permission_classes =[IsAuthenticated]
-#      def post(self,request):
-#           user = request.user
-#           send_to = request.data.get('send_to')
-#           try:
-#             post_id=request.data.get('post_id')
-#             print("Post_id:",post_id)
-#             post = Post.objects.get(id=post_id)
-#             message=request.data.get('message')
-#             for id in send_to:
-#                 receiver = User.objects.get(id=id)
-#                 SharePost.objects.create(sender=user,receiver=receiver,post=post,message=message)    
-#                 # Message.objects.create(sender=user,chat=)
-            
-            
-#             return Response({"details":"Post shared successfully...!"})
-#           except Exception as error:
-#                print("Error:",error)
-#                return Response({"details":str(error)})

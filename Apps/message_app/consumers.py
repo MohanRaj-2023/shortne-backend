@@ -209,14 +209,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-    # # get unread message count
-    # @database_sync_to_async
-    # def get_unread_count(self):
-    #         user = self.user
-    #         chats = Chat.objects.filter(user1=user) | Chat.objects.filter(user2=user)
-    #         unread = Message.objects.filter(chat__in=chats, is_read=False).exclude(sender=user)
-    #         return unread.count()
-
 
     async def chat_alert(self, event):
         await self.send(text_data=json.dumps({

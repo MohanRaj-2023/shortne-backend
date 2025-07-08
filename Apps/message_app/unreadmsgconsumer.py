@@ -7,7 +7,14 @@ from message_app.models import Message, Chat
 class UnreadMessageConsumer(AsyncWebsocketConsumer):
     print("🚨 CONNECTING to UnreadMessageConsumer...")
     async def connect(self):
+        print("🚨 UnreadMessageConsumer CONNECT triggered")
         self.user = self.scope["user"]
+        print("🔍 WebSocket connected as user:", self.user.id)
+        if not self.user.is_authenticated:
+            print("❌ Unauthenticated in UnreadMessageConsumer")
+            await self.close()
+            return
+
         print(f"🔌 Connected to UnreadMessageConsumer: {self.user}")
         print("🧑 Connected User ID:", self.user.id)
         self.group_name = f'unread_user_{self.user.id}'
@@ -23,18 +30,6 @@ class UnreadMessageConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-    # async def receive(self, text_data):
-    #     data = json.loads(text_data)
-    #     print("🎯 UnreadMessageConsumer.receive() received data:", data)
-    #     # msg_type = data.get("type")
-
-    #     # if msg_type == "get_unread_count":
-    #     #     print("📥 get_unread_count received in UnreadMessageConsumer")
-    #     #     count = await self.get_unread_count()
-    #     #     await self.send(text_data=json.dumps({
-    #     #         "type": "UNREAD_MESSAGE_COUNT",
-    #     #         "unread_messages": count
-    #     #     }))
 
     async def unread_message_count(self, event):
         print("📨 unread_message_count RECEIVED in consumer with count:", event['unread_messages'])  # ✅ Debug here
