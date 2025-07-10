@@ -89,7 +89,7 @@ class PostCreateView(APIView):
 
                 # Custom size limits
                 image_limit = 5 * 1024 * 1024  # 5 MB
-                video_limit = 10 * 1024 * 1024  # 10 MB
+                video_limit = 9 * 1024 * 1024  # 9 MB
 
                 file_name = getattr(file, 'name', None)
                 if not file_name:
