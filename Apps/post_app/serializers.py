@@ -14,7 +14,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 # user search serializer.
 
 class UserSearchSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(source='profile.image')  # assuming OneToOne link
+    image = serializers.URLField(source='profile.image')  # assuming OneToOne link
     posts_count = serializers.SerializerMethodField()
     followers_count = serializers.SerializerMethodField()
     following_count = serializers.SerializerMethodField()
