@@ -95,7 +95,7 @@ class SigninView(APIView):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             print("email not match")
-            return Response({"Error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"Error": "Invalid credentials email"}, status=status.HTTP_401_UNAUTHORIZED)
         
         if user.check_password(password):
             refresh_token = RefreshToken.for_user(user)
@@ -111,7 +111,7 @@ class SigninView(APIView):
 
         
         print("password not match")
-        return Response({"Error":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"Error":"Invalid credentials password"},status=status.HTTP_401_UNAUTHORIZED)
     
 class SignoutView(APIView):
     authentication_classes = [JWTAuthentication]
