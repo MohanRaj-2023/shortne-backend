@@ -243,7 +243,7 @@ class CombinedSearchView(APIView):
         user = request.user
 
         # 1. Search users by username
-        users = User.objects.filter(username__icontains=query).select_related('profile')[:10]
+        users = User.objects.filter(username__icontains=query,is_superuser=False,is_staff=False).select_related('profile')[:10]
 
         # 2. Search posts by caption or hashtags
         posts = Post.objects.filter(
