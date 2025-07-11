@@ -167,7 +167,10 @@ DATABASES = {
         'PORT': os.getenv('PORT'),
     }
 }
-
+print("ENGINE =", os.getenv("ENGINE"))  # should print the correct string
+print("NAME =",os.getenv('NAME'))
+print("USER =",os.getenv('USER'))
+print("HOST =",os.getenv('HOST'))
 
 # Cloud storage
 
