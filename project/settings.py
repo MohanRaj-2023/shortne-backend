@@ -153,9 +153,21 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # }
 # print("🚨 DATABASE_URL:", os.environ.get("DATABASE_URL"))
 
+# DATABASES = {
+#     'default': dj_database_url.config(conn_max_age=600)
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
+    'default': {
+        'ENGINE': os.getenv('ENGINE'),
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('PORT'),
+    }
 }
+
 
 # Cloud storage
 

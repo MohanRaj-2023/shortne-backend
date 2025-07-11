@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('caption', models.TextField(blank=True)),
-                ('media', models.FileField(upload_to='posts/media/', validators=[post_app.models.file_size_type_validator])),
+                ('media', models.FileField(upload_to='posts/media/')),
                 ('media_type', models.CharField(blank=True, max_length=100, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('hashtags', models.ManyToManyField(blank=True, to='post_app.hashtags')),
