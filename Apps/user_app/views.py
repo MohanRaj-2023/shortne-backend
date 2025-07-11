@@ -87,19 +87,30 @@ class SigninView(APIView):
     def post(self,request):
         email=request.data.get('email')
         password=request.data.get('password')
+        print("Email:",email)
+        print("Password:",password)
+        # user = authenticate(request,username=email,password=password)
 
-        user = authenticate(request,username=email,password=password)
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            print("email not match")
+            return Response({"Error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         
-        if user is not None:
+        if user.check_password(password):
             refresh_token = RefreshToken.for_user(user)
             access_token = refresh_token.access_token
+
             return Response({
-                'id'     : user.id,
-                'refresh':str(refresh_token),
-                'access':str(access_token),
-                'username':user.username,
-                'is_active':user.is_active
-            },status=status.HTTP_200_OK)
+                'id': user.id,
+                'refresh': str(refresh_token),
+                'access': str(access_token),
+                'username': user.username,
+                'is_active': user.is_active
+            }, status=status.HTTP_200_OK)
+
+        
+        print("password not match")
         return Response({"Error":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
     
 class SignoutView(APIView):
