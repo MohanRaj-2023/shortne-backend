@@ -87,7 +87,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-
+# local channel config
 # CHANNEL_LAYERS = {
 #     'default': {
 #         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -138,6 +138,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# local db config
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -153,24 +154,25 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # }
 # print("🚨 DATABASE_URL:", os.environ.get("DATABASE_URL"))
 
-# DATABASES = {
-#     'default': dj_database_url.config(conn_max_age=600)
-# }
-
+# render db
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('ENGINE'),
-        'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('DB_PORT'),
-    }
+    'default': dj_database_url.config(conn_max_age=600)
 }
-print("ENGINE =", os.getenv("ENGINE"))  # should print the correct string
-print("NAME =",os.getenv('NAME'))
-print("USER =",os.getenv('USER'))
-print("HOST =",os.getenv('HOST'))
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.getenv('ENGINE'),
+#         'NAME': os.getenv('NAME'),
+#         'USER': os.getenv('USER'),
+#         'PASSWORD': os.getenv('PASSWORD'),
+#         'HOST': os.getenv('HOST'),
+#         'PORT': os.getenv('DB_PORT'),
+#     }
+# }
+# print("ENGINE =", os.getenv("ENGINE"))  # should print the correct string
+# print("NAME =",os.getenv('NAME'))
+# print("USER =",os.getenv('USER'))
+# print("HOST =",os.getenv('HOST'))
 
 # Cloud storage
 
