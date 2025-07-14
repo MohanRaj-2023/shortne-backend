@@ -138,7 +138,7 @@ class PasswordupdaterequestView(APIView):
         try:
             user = User.objects.get(email=data)
             email_subject='Password Reset Request'
-            reset_link=f"https://shortne-backend.onrender.com/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{generate_token.make_token(user)}"
+            reset_link=f"https://6873523c371b8f0008fe4785--shortne.netlify.app/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{generate_token.make_token(user)}"
             message = render_to_string('password_reset_request.html',{
                     'user':user,
                     'domain':reset_link,           
