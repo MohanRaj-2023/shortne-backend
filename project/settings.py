@@ -150,7 +150,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #                     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
 #                     }
 #     },
-    
 # }
 # print("🚨 DATABASE_URL:", os.environ.get("DATABASE_URL"))
 

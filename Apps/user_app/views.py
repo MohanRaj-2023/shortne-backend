@@ -53,9 +53,10 @@ class SignupView(APIView):
         user = User.objects.create(email=data['email'],username=data['username'],password=make_password(data['password']),is_active=False)
 
         email_subject="Account Activation!"
+        # http://127.0.0.1:8000
         message = render_to_string('activate.html',{
             'user':user,
-            'domain':'http://127.0.0.1:8000',
+            'domain':'https://shortne-backend.onrender.com',
             'user_id': urlsafe_base64_encode(force_bytes(user.pk)),
             'token':generate_token.make_token(user)
         })
@@ -137,7 +138,7 @@ class PasswordupdaterequestView(APIView):
         try:
             user = User.objects.get(email=data)
             email_subject='Password Reset Request'
-            reset_link=f"http://localhost:5173/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{generate_token.make_token(user)}"
+            reset_link=f"https://shortne-backend.onrender.com/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{generate_token.make_token(user)}"
             message = render_to_string('password_reset_request.html',{
                     'user':user,
                     'domain':reset_link,           
