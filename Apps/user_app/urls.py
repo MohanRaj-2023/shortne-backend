@@ -23,5 +23,5 @@ urlpatterns = [
     path('followers/',FollowersView.as_view(),name='followers'),
     path('friends/',FriendslistView.as_view(),name='friends'),
     path('user-profile/edit/',EditUserinfoView.as_view(),name='edit-profile'),
-    path('delete-account/',DeleteAccountView.as_view(),name='delete-account')
+    path('delete-account',DeleteAccountView.as_view(),name='delete-account')
 ]
