@@ -175,7 +175,21 @@ class ResetPasswordView(APIView):
             print("Error:....",error)
             return Response('password reset fail..')
     
-# leo@123
+# Delete Account
+class DeleteAccountView(APIView):
+    permission_classes=[IsAuthenticated]
+    def delete(self,request):
+        user = request.user
+        try:
+            refresh_token = request.data.get('refresh')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+        except Exception as e:
+            return Response({"error": "Invalid refresh token"},status=status.HTTP_400_BAD_REQUEST)
+        
+        user.delete()
+        return Response({"details":"Account deleted successfully."},status=status.HTTP_200_OK)
         
 class UserProfileView(APIView):
     def get(self,request):
