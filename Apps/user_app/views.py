@@ -16,6 +16,9 @@ from django.utils.encoding import force_bytes,force_str
 from django.core.mail import EmailMessage
 from django.conf import settings
 
+# increase mail send speed
+import threading
+
 #Generate token
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -35,6 +38,15 @@ from cloudinary.uploader import destroy
 from urllib.parse import urlparse
 
 # Create your views here.
+
+# Email thred
+class EmailThread(threading.Thread):
+    def __init__(self,email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+    
+    def run(self):
+        self.email_message.send()
 
 class PostPagination(PageNumberPagination):
     page_size = 10
@@ -61,8 +73,11 @@ class SignupView(APIView):
             'token':generate_token.make_token(user)
         })
 
+
         email=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
-        email.send()
+
+        EmailThread(email).start()
+        # email.send()
 
         return Response({"details":"Check your email to activate your account"},status=status.HTTP_200_OK)
 
@@ -145,7 +160,8 @@ class PasswordupdaterequestView(APIView):
                     })
             email = EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data])
             email.content_subtype='html'
-            email.send()
+            EmailThread(email).start()
+            # email.send()
             return Response({"details":"Please check your email to update new password."})
         except Exception as error:
             print("Reser_Password_Error:-----",error)
