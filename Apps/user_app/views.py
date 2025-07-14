@@ -76,7 +76,7 @@ class SignupView(APIView):
 
         email=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
 
-        EmailThread(email).start()
+        EmailThread(email).run()
         # email.send()
 
         return Response({"details":"Check your email to activate your account"},status=status.HTTP_200_OK)
@@ -160,7 +160,7 @@ class PasswordupdaterequestView(APIView):
                     })
             email = EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data])
             email.content_subtype='html'
-            EmailThread(email).start()
+            EmailThread(email).run()
             # email.send()
             return Response({"details":"Please check your email to update new password."})
         except Exception as error:
