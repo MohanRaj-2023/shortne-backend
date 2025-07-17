@@ -107,7 +107,7 @@ class PostCreateView(APIView):
                     if mime_type.startswith('image') and file.size > image_limit:
                         return Response({"error": "Image must be less than 5MB"}, status=status.HTTP_400_BAD_REQUEST)
                     elif mime_type.startswith('video') and file.size > video_limit:
-                        return Response({"error": "Video must be less than 10MB"}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"error": "Video must be less than 9MB"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
 
